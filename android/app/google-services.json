@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "436538113067",
+    "project_id": "app-gestao-horas-servidores",
+    "storage_bucket": "app-gestao-horas-servidores.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:436538113067:android:4def1ffda33bc504f7fe6e",
+        "android_client_info": {
+          "package_name": "br.com.shiroshima.gestor_horas_extras"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "436538113067-nnc80i2o6rl9pf05bk3lt2594e3n45qa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDLMBggbrow37w0E8gLZU5wlSz4woX4xrs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "436538113067-nnc80i2o6rl9pf05bk3lt2594e3n45qa.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "436538113067-4n4pte1dj0adej3p616q45qvnv1j6npe.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "br.com.shiroshima.gestorHorasExtras"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
