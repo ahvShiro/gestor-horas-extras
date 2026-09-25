@@ -1,12 +1,18 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:gestor_horas_extras/core/app_routes.dart';
+import 'package:gestor_horas_extras/features/authentication/presentation/screens/login_screen.dart';
+import 'package:gestor_horas_extras/features/authentication/presentation/screens/sign_up_screen.dart';
+import 'package:go_router/go_router.dart';
 
-import 'features/authentication/presentation/screens/login_screen.dart';
-import 'features/authentication/presentation/screens/password_recover_screen.dart';
-import 'features/authentication/presentation/screens/reset_password_screen.dart';
-import 'features/authentication/presentation/screens/sign_up_screen.dart';
 import 'firebase_options.dart';
+
+final _router = GoRouter(
+  initialLocation: '/',
+  routes: [
+    GoRoute(path: '/', builder: (context, state) => LoginScreen()),
+    GoRoute(path: '/signup', builder: (context, state) => SignUpScreen()),
+  ],
+);
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,19 +27,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'Gestão de Horas',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
       debugShowCheckedModeBanner: false,
-      routes: {
-        AppRoutes.login: (context) => const LoginScreen(),
-        AppRoutes.passwordRecovery: (context) => const PasswordRecoverScreen(),
-        AppRoutes.passwordRecoveryNew: (context) => const ResetPasswordScreen(),
-        AppRoutes.signUp: (context) => const SignUpScreen(),
-      },
-      home: const LoginScreen(),
+      routerConfig: _router,
     );
   }
 }

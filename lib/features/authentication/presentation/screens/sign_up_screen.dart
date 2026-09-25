@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gestor_horas_extras/common_widgets/primary_bottom_button.dart';
 import 'package:gestor_horas_extras/core/utils.dart';
+import 'package:go_router/go_router.dart';
 
 import '../widgets/auth_screen_section.dart';
 import '../widgets/auth_text_form_field.dart';
@@ -101,7 +102,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
               labelText: 'Nome completo',
               hintText: 'Insira seu nome completo',
             ),
+
             const SizedBox(height: 18),
+
             AuthTextFormField(
               controller: _controllerUsername,
               validator: (value) {
@@ -110,7 +113,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
               labelText: 'Nome de usuário',
               hintText: 'Insira seu nome de usuário',
             ),
+
             const SizedBox(height: 18),
+
             AuthTextFormField(
               controller: _controllerEmail,
               keyboardType: TextInputType.emailAddress,
@@ -118,7 +123,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
               labelText: 'Email',
               hintText: 'Insira seu email',
             ),
+
             const SizedBox(height: 20),
+
             PrimaryBottomButton(
               label: 'Prosseguir',
               onPressed: _goToPasswordStep,
@@ -143,7 +150,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
               hintText: 'Insira sua senha',
               obscureText: true,
             ),
+
             const SizedBox(height: 18),
+
             AuthTextFormField(
               controller: _controllerRepeatPassword,
               validator: _validateRepeatPassword,
@@ -151,12 +160,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
               hintText: 'Repita sua senha',
               obscureText: true,
             ),
+
             const SizedBox(height: 20),
+
             PrimaryBottomButton(
               label: 'Criar Conta',
               onPressed: _createAccount,
             ),
+
             const SizedBox(height: 12),
+
             TextButton(
               onPressed: () {
                 _pageController.previousPage(
@@ -184,10 +197,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
           icon: const Icon(Icons.keyboard_arrow_left),
           onPressed: () {
             if (_pageController.page == null || _pageController.page == 0) {
-              Navigator.pop(context);
+              context.pop();
               return;
             }
-
             _pageController.previousPage(
               duration: const Duration(milliseconds: 250),
               curve: Curves.easeInOut,
