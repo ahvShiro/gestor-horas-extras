@@ -1,7 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
-class WorkPlace {
-  const WorkPlace({
+class Workplace {
+  const Workplace({
     required this.name,
     required this.description,
     required this.uid,
@@ -15,12 +13,16 @@ class WorkPlace {
     return {'uid': uid, 'name': name, 'description': description};
   }
 
-  factory WorkPlace.fromMap(Map<String, dynamic> map) => WorkPlace(
-    uid: map['uid'] as String,
-    name: map['name'] as String,
-    description: map['description'] as String,
+  factory Workplace.fromMap(Map<String, dynamic> map, String id) => Workplace(
+    uid: id,
+    name: map['name'] as String ?? '',
+    description: map['description'] as String ?? '',
   );
 
-  factory WorkPlace.fromDocument(DocumentSnapshot<Map<String, dynamic>> doc) =>
-      WorkPlace.fromMap(doc.data()!);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) || (other is Workplace && other.uid == uid);
+
+  @override
+  int get hashCode => uid.hashCode;
 }
