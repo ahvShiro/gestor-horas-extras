@@ -1,10 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gestor_horas_extras/core/models/app_user.dart';
 import 'package:gestor_horas_extras/features/authentication/data/repositories/app_user_repository.dart';
+import 'package:gestor_horas_extras/features/authentication/data/repositories/firestore_app_user_repository.dart';
+import 'package:gestor_horas_extras/features/authentication/domain/repositories/app_user_repository.dart';
+
 
 class AuthService {
+  AuthService({AppUserRepository? userRepository})
+    : _userRepository = userRepository ?? FirestoreAppUserRepository();
+
   final _auth = FirebaseAuth.instance;
-  final _db = AppUserRepository();
+  final AppUserRepository _userRepository;
 
   Future<void> signup({
     required String email,
