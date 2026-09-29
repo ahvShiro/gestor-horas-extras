@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:gestor_horas_extras/common_widgets/primary_bottom_button.dart';
-import 'package:gestor_horas_extras/core/utils.dart';
+import 'package:gestor_horas_extras/core/models/work_place.dart';
+import 'package:gestor_horas_extras/features/authentication/presentation/controller/sign_up_controller.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/utils.dart';
 import '../widgets/auth_screen_section.dart';
 import '../widgets/auth_text_form_field.dart';
 
@@ -14,11 +16,14 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
+  final _controller = SignUpController();
+
   final _pageController = PageController();
+
   final _infoFormKey = GlobalKey<FormState>();
   final _passwordFormKey = GlobalKey<FormState>();
+
   final _controllerFullName = TextEditingController();
-  final _controllerUsername = TextEditingController();
   final _controllerEmail = TextEditingController();
   final _controllerPassword = TextEditingController();
   final _controllerRepeatPassword = TextEditingController();
@@ -26,21 +31,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   void initState() {
     super.initState();
-    _loadServiceLocations();
+    _controller.loadWorkspaces();
   }
 
   @override
   void dispose() {
     _pageController.dispose();
     _controllerFullName.dispose();
-    _controllerUsername.dispose();
     _controllerEmail.dispose();
     _controllerPassword.dispose();
     _controllerRepeatPassword.dispose();
     super.dispose();
   }
-
-  Future<void> _loadServiceLocations() async {}
 
   String? _requiredField(String? value, String message) {
     if (value == null || value.trim().isEmpty) {
@@ -87,6 +89,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return null;
   }
 
+  Future<void> _createAccount() async {
+    final success = await _controller.createAccount(
+      name: _controllerFullName.text,
+      email: _controllerEmail.text,
+      password: _controllerPassword.text,
+    );
+    if (success) _redirect();
+  }
+
+  void _redirect() {
+    context.go("/test");
+  }
+
   Widget _buildInfoStep() {
     return AuthScreenSection(
       title: 'Crie sua conta:',
@@ -106,22 +121,30 @@ class _SignUpScreenState extends State<SignUpScreen> {
             const SizedBox(height: 18),
 
             AuthTextFormField(
-              controller: _controllerUsername,
-              validator: (value) {
-                return _requiredField(value, 'Insira seu nome de usuário');
-              },
-              labelText: 'Nome de usuário',
-              hintText: 'Insira seu nome de usuário',
-            ),
-
-            const SizedBox(height: 18),
-
-            AuthTextFormField(
               controller: _controllerEmail,
               keyboardType: TextInputType.emailAddress,
               validator: (value) => (_validateEmail(value)),
               labelText: 'Email',
               hintText: 'Insira seu email',
+            ),
+
+            const SizedBox(height: 18),
+
+            DropdownButtonFormField<Workplace>(
+              decoration: InputDecoration(
+                labelText: 'Select an option',
+                border: OutlineInputBorder(),
+              ),
+              initialValue: _controller.selectedWorkplace,
+              items: _controller.workplaces
+                  .map(
+                    (workplace) => DropdownMenuItem<Workplace>(
+                      value: workplace,
+                      child: Text(workplace.name),
+                    ),
+                  )
+                  .toList(),
+              onChanged: _controller.selectWorkplace,
             ),
 
             const SizedBox(height: 20),
@@ -151,6 +174,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               obscureText: true,
             ),
 
+            // TODO adicionar um medidor de força de senha
             const SizedBox(height: 18),
 
             AuthTextFormField(
@@ -185,33 +209,36 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  Future<void> _createAccount() async {}
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Criar conta'),
-        centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(Icons.keyboard_arrow_left),
-          onPressed: () {
-            if (_pageController.page == null || _pageController.page == 0) {
-              context.pop();
-              return;
-            }
-            _pageController.previousPage(
-              duration: const Duration(milliseconds: 250),
-              curve: Curves.easeInOut,
-            );
-          },
-        ),
-      ),
-      body: PageView(
-        controller: _pageController,
-        physics: const NeverScrollableScrollPhysics(),
-        children: [_buildInfoStep(), _buildPasswordStep()],
-      ),
+    return ListenableBuilder(
+      listenable: _controller,
+      builder: (context, _) {
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text('Criar conta'),
+            centerTitle: true,
+            leading: IconButton(
+              icon: const Icon(Icons.keyboard_arrow_left),
+              onPressed: () {
+                if (_pageController.page == null || _pageController.page == 0) {
+                  context.pop();
+                  return;
+                }
+                _pageController.previousPage(
+                  duration: const Duration(milliseconds: 250),
+                  curve: Curves.easeInOut,
+                );
+              },
+            ),
+          ),
+          body: PageView(
+            controller: _pageController,
+            physics: const NeverScrollableScrollPhysics(),
+            children: [_buildInfoStep(), _buildPasswordStep()],
+          ),
+        );
+      },
     );
   }
 }
