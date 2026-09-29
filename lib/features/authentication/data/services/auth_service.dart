@@ -59,7 +59,7 @@ class AuthService {
         case 'INVALID_LOGIN_CREDENTIALS':
           throw LoginException('Email ou senha incorretos');
         default:
-          throw LoginException('Erro ao criar a conta');
+          throw LoginException('Erro ao entrar');
       }
     }
   }

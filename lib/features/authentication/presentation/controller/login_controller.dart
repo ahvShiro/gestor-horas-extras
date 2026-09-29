@@ -16,20 +16,23 @@ class LoginController extends ChangeNotifier {
     required String email,
     required String password,
   }) async {
+    loading = true;
+    errorMessage = null;
+    notifyListeners();
+
     try {
-      loading = true;
-      notifyListeners();
-
       await _authService.login(email: email, password: password);
-
-      loading = false;
-      notifyListeners();
 
       return true;
     } on LoginException catch (e) {
       errorMessage = e.message;
-      notifyListeners();
       return false;
+    } catch (_) {
+      errorMessage = 'Não foi possível entrar. Tente novamente.';
+      return false;
+    } finally {
+      loading = false;
+      notifyListeners();
     }
   }
 }

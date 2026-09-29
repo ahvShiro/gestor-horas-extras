@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:gestor_horas_extras/common_widgets/app_snack_bar.dart';
+import 'package:gestor_horas_extras/common_widgets/primary_bottom_button.dart';
 import 'package:gestor_horas_extras/core/utils.dart';
 import 'package:gestor_horas_extras/features/authentication/presentation/controller/login_controller.dart';
 import 'package:go_router/go_router.dart';
@@ -34,7 +36,18 @@ class _LoginScreenState extends State<LoginScreen> {
       password: _passwordController.text,
     );
 
-    if (status) _redirect();
+    if (!mounted) return;
+
+    if (status) {
+      _redirect();
+      return;
+    }
+
+    final message = _controller.errorMessage;
+
+    if (message != null) {
+      AppSnackBar.showError(context, message);
+    }
   }
 
   void _redirect() {
@@ -76,52 +89,50 @@ class _LoginScreenState extends State<LoginScreen> {
 
               Form(
                 key: _formKey,
-                child: Column(
-                  children: <Widget>[
-                    TextFormField(
-                      validator: (value) => Utils.validateEmail(value),
-                      controller: _emailController,
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'Email',
-                        hintText: 'Insira seu email',
-                      ),
-                    ),
-
-                    const SizedBox(height: 18),
-
-                    TextFormField(
-                      validator: (value) => value == null || value.trim() == ''
-                          ? "Insira uma senha"
-                          : null,
-                      obscureText: true,
-                      controller: _passwordController,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'Senha',
-                        hintText: 'Insira sua senha',
-                      ),
-                    ),
-
-                    const SizedBox(height: 20),
-
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () => _login(),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.black87,
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(vertical: 20),
+                child: ListenableBuilder(
+                  listenable: _controller,
+                  builder: (context, _) {
+                    return Column(
+                      children: <Widget>[
+                        TextFormField(
+                          validator: (value) => Utils.validateEmail(value),
+                          controller: _emailController,
+                          keyboardType: TextInputType.emailAddress,
+                          enabled: !_controller.loading,
+                          decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: 'Email',
+                            hintText: 'Insira seu email',
+                          ),
                         ),
-                        child: const Text(
-                          'Entrar',
-                          style: TextStyle(fontSize: 18),
+
+                        const SizedBox(height: 18),
+
+                        TextFormField(
+                          validator: (value) =>
+                              value == null || value.trim() == ''
+                              ? "Insira uma senha"
+                              : null,
+                          obscureText: true,
+                          controller: _passwordController,
+                          enabled: !_controller.loading,
+                          decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: 'Senha',
+                            hintText: 'Insira sua senha',
+                          ),
                         ),
-                      ),
-                    ),
-                  ],
+
+                        const SizedBox(height: 20),
+
+                        PrimaryBottomButton(
+                          label: 'Entrar',
+                          onPressed: _login,
+                          isLoading: _controller.loading,
+                        ),
+                      ],
+                    );
+                  },
                 ),
               ),
 
