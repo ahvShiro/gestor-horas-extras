@@ -12,7 +12,7 @@ class AppUser {
   final String workplaceId;
 
   Map<String, dynamic> toMap() {
-    return {'fullName': fullName, 'email': email, 'workplace': workplaceId};
+    return {'fullName': fullName, 'email': email, 'workplaceId': workplaceId};
   }
 
   factory AppUser.fromMap(Map<String, dynamic> map, String id) {
