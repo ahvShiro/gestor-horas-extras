@@ -15,8 +15,8 @@ class Workplace {
 
   factory Workplace.fromMap(Map<String, dynamic> map, String id) => Workplace(
     uid: id,
-    name: map['name'] as String ?? '',
-    description: map['description'] as String ?? '',
+    name: map['name'] as String,
+    description: map['description'] as String,
   );
 
   @override
