@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:gestor_horas_extras/core/models/app_user.dart';
+import 'package:gestor_horas_extras/features/authentication/domain/repositories/app_user_repository.dart';
 
-class AppUserRepository {
+import '../../../../core/models/app_user.dart';
+
+class FirestoreAppUserRepository implements AppUserRepository {
   final _db = FirebaseFirestore.instance
       .collection('users')
       .withConverter(
@@ -10,7 +12,8 @@ class AppUserRepository {
         toFirestore: (appUser, _) => appUser.toMap(),
       );
 
-  Future<DocumentReference<AppUser>> save(AppUser user) async {
-    return await _db.add(user);
+  @override
+  Future<void> save(AppUser user) async {
+    await _db.add(user);
   }
 }
