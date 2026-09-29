@@ -3,7 +3,7 @@ import 'package:gestor_horas_extras/core/models/app_user.dart';
 import 'package:gestor_horas_extras/features/authentication/data/repositories/firestore_app_user_repository.dart';
 import 'package:gestor_horas_extras/features/authentication/domain/repositories/app_user_repository.dart';
 
-import '../exceptions/signup_exception.dart';
+import '../exceptions/sign_up_exception.dart';
 
 class AuthService {
   AuthService({AppUserRepository? userRepository})
@@ -12,7 +12,7 @@ class AuthService {
   final _auth = FirebaseAuth.instance;
   final AppUserRepository _userRepository;
 
-  Future<void> signup({
+  Future<void> signUp({
     required String email,
     required String password,
     required String name,
@@ -41,11 +41,11 @@ class AuthService {
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case 'weak-password':
-          throw SignupException('Senha fraca');
+          throw SignUpException('Senha fraca');
         case 'email-already-in-use':
-          throw SignupException('Email já cadastrado');
+          throw SignUpException('Email já cadastrado');
         default:
-          throw SignupException('Erro ao criar a conta');
+          throw SignUpException('Erro ao criar a conta');
       }
     }
   }

@@ -11,7 +11,7 @@ final _router = GoRouter(
   initialLocation: '/',
   routes: [
     GoRoute(path: '/', builder: (context, state) => LoginScreen()),
-    GoRoute(path: '/signup', builder: (context, state) => SignUpScreen()),
+    GoRoute(path: '/sign_up', builder: (context, state) => SignUpScreen()),
     GoRoute(path: '/test', builder: (context, state) => TestScreen()),
   ],
 );

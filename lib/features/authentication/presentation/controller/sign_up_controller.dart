@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gestor_horas_extras/features/authentication/data/exceptions/signup_exception.dart';
+import 'package:gestor_horas_extras/features/authentication/data/exceptions/sign_up_exception.dart';
 import 'package:gestor_horas_extras/features/authentication/data/services/auth_service.dart';
 import 'package:gestor_horas_extras/features/authentication/domain/repositories/workplace_repository.dart';
 
@@ -46,14 +46,14 @@ class SignUpController extends ChangeNotifier {
     if (selectedWorkplace == null) return false;
 
     try {
-      await _authService.signup(
+      await _authService.signUp(
         email: email,
         password: password,
         name: name,
         workplaceId: selectedWorkplace!.uid,
       );
       return true;
-    } on SignupException catch (e) {
+    } on SignUpException catch (e) {
       errorMessage = e.message;
       notifyListeners();
       return false;

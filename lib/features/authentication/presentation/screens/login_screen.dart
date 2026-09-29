@@ -43,7 +43,7 @@ class _LoginScreenState extends State<LoginScreen> {
               Align(
                 alignment: Alignment.centerLeft,
                 child: GestureDetector(
-                  onTap: () => context.go("/signup"),
+                  onTap: () => context.go("/sign_up"),
                   child: const Text(
                     'Não tem uma conta? Cadastre-se aqui',
                     style: TextStyle(fontSize: 16, color: Colors.blue),
