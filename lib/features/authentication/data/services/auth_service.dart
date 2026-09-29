@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gestor_horas_extras/core/models/app_user.dart';
-import 'package:gestor_horas_extras/features/authentication/data/repositories/app_user_repository.dart';
 import 'package:gestor_horas_extras/features/authentication/data/repositories/firestore_app_user_repository.dart';
 import 'package:gestor_horas_extras/features/authentication/domain/repositories/app_user_repository.dart';
 
+import '../exceptions/signup_exception.dart';
 
 class AuthService {
   AuthService({AppUserRepository? userRepository})
@@ -37,15 +37,15 @@ class AuthService {
         workplaceId: workplaceId,
       );
 
-      await _db.save(user);
+      await _userRepository.save(user);
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case 'weak-password':
-          throw Exception('Senha fraca');
+          throw SignupException('Senha fraca');
         case 'email-already-in-use':
-          throw Exception('Email já cadastrado');
+          throw SignupException('Email já cadastrado');
         default:
-          throw Exception('Erro ao criar a conta');
+          throw SignupException('Erro ao criar a conta');
       }
     }
   }
