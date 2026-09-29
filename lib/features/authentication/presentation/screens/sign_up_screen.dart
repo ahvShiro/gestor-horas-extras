@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gestor_horas_extras/common_widgets/app_snack_bar.dart';
 import 'package:gestor_horas_extras/common_widgets/primary_bottom_button.dart';
 import 'package:gestor_horas_extras/core/models/work_place.dart';
 import 'package:gestor_horas_extras/features/authentication/presentation/controller/sign_up_controller.dart';
@@ -31,7 +32,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   void initState() {
     super.initState();
-    _controller.loadWorkspaces();
+    _loadWorkspaces();
+  }
+
+  Future<void> _loadWorkspaces() async {
+    await _controller.loadWorkspaces();
+
+    if (!mounted) return;
+
+    final message = _controller.errorMessage;
+    if (message != null) {
+      AppSnackBar.showError(context, message);
+    }
   }
 
   @override
@@ -89,13 +101,25 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return null;
   }
 
-  Future<void> _createAccount() async {
+  void _createAccount() async {
     final success = await _controller.createAccount(
       name: _controllerFullName.text,
       email: _controllerEmail.text,
       password: _controllerPassword.text,
     );
-    if (success) _redirect();
+
+    if (!mounted) return;
+
+    if (success) {
+      _redirect();
+      return;
+    }
+
+    final message = _controller.errorMessage;
+
+    if (message != null) {
+      AppSnackBar.showError(context, message);
+    }
   }
 
   void _redirect() {
@@ -116,6 +140,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               },
               labelText: 'Nome completo',
               hintText: 'Insira seu nome completo',
+              enabled: !_controller.isLoading,
             ),
 
             const SizedBox(height: 18),
@@ -126,6 +151,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               validator: (value) => (_validateEmail(value)),
               labelText: 'Email',
               hintText: 'Insira seu email',
+              enabled: !_controller.isLoading,
             ),
 
             const SizedBox(height: 18),
@@ -144,7 +170,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                   )
                   .toList(),
-              onChanged: _controller.selectWorkplace,
+              validator: (value) =>
+                  value == null ? 'Selecione um local de trabalho' : null,
+              onChanged: _controller.isLoading
+                  ? null
+                  : _controller.selectWorkplace,
             ),
 
             const SizedBox(height: 20),
@@ -152,6 +182,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             PrimaryBottomButton(
               label: 'Prosseguir',
               onPressed: _goToPasswordStep,
+              isLoading: _controller.isLoading,
             ),
           ],
         ),
@@ -172,6 +203,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               labelText: 'Senha',
               hintText: 'Insira sua senha',
               obscureText: true,
+              enabled: !_controller.isLoading,
             ),
 
             // TODO adicionar um medidor de força de senha
@@ -183,6 +215,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               labelText: 'Repetir a senha',
               hintText: 'Repita sua senha',
               obscureText: true,
+              enabled: !_controller.isLoading,
             ),
 
             const SizedBox(height: 20),
@@ -190,6 +223,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             PrimaryBottomButton(
               label: 'Criar Conta',
               onPressed: _createAccount,
+              isLoading: _controller.isLoading,
             ),
 
             const SizedBox(height: 12),

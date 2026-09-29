@@ -25,12 +25,17 @@ class SignUpController extends ChangeNotifier {
 
   Future<void> loadWorkspaces() async {
     isLoading = true;
+    errorMessage = null;
     notifyListeners();
 
-    workplaces = await _workplaceRepository.getAll();
-
-    isLoading = false;
-    notifyListeners();
+    try {
+      workplaces = await _workplaceRepository.getAll();
+    } catch (_) {
+      errorMessage = 'Não foi possível carregar os locais de trabalho.';
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
   }
 
   void selectWorkplace(Workplace? workplace) {
@@ -43,7 +48,15 @@ class SignUpController extends ChangeNotifier {
     required String email,
     required String password,
   }) async {
-    if (selectedWorkplace == null) return false;
+    if (selectedWorkplace == null) {
+      errorMessage = 'Selecione um local de trabalho';
+      notifyListeners();
+      return false;
+    }
+
+    isLoading = true;
+    errorMessage = null;
+    notifyListeners();
 
     try {
       await _authService.signUp(
@@ -55,8 +68,13 @@ class SignUpController extends ChangeNotifier {
       return true;
     } on SignUpException catch (e) {
       errorMessage = e.message;
-      notifyListeners();
       return false;
+    } catch (_) {
+      errorMessage = 'Não foi possível criar a conta. Tente novamente.';
+      return false;
+    } finally {
+      isLoading = false;
+      notifyListeners();
     }
   }
 }

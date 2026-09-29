@@ -11,6 +11,7 @@ class AuthTextFormField extends StatelessWidget {
     this.keyboardType,
     this.obscureText = false,
     this.inputFormatters,
+    this.enabled = true,
   });
 
   final TextEditingController controller;
@@ -20,6 +21,7 @@ class AuthTextFormField extends StatelessWidget {
   final TextInputType? keyboardType;
   final bool obscureText;
   final List<TextInputFormatter>? inputFormatters;
+  final bool enabled;
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +30,7 @@ class AuthTextFormField extends StatelessWidget {
       keyboardType: keyboardType,
       obscureText: obscureText,
       inputFormatters: inputFormatters,
+      enabled: enabled,
       validator: validator,
       decoration: InputDecoration(
         border: const OutlineInputBorder(),
