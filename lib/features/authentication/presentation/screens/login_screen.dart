@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:gestor_horas_extras/core/utils.dart';
+import 'package:gestor_horas_extras/features/authentication/presentation/controller/login_controller.dart';
 import 'package:go_router/go_router.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -9,6 +11,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final _controller = LoginController();
+
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -18,6 +22,23 @@ class _LoginScreenState extends State<LoginScreen> {
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+
+  void _login() async {
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+
+    final status = await _controller.authenticateUser(
+      email: _emailController.text,
+      password: _passwordController.text,
+    );
+
+    if (status) _redirect();
+  }
+
+  void _redirect() {
+    context.go('/test');
   }
 
   @override
@@ -58,19 +79,22 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Column(
                   children: <Widget>[
                     TextFormField(
-                      validator: (value) => _emailValidator(value),
+                      validator: (value) => Utils.validateEmail(value),
                       controller: _emailController,
+                      keyboardType: TextInputType.emailAddress,
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
-                        labelText: 'Usuário',
-                        hintText: 'Insira seu nome de usuário',
+                        labelText: 'Email',
+                        hintText: 'Insira seu email',
                       ),
                     ),
 
                     const SizedBox(height: 18),
 
                     TextFormField(
-                      validator: (value) => _passwordValidator(value),
+                      validator: (value) => value == null || value.trim() == ''
+                          ? "Insira uma senha"
+                          : null,
                       obscureText: true,
                       controller: _passwordController,
                       decoration: const InputDecoration(
@@ -119,20 +143,4 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
-
-  String? _emailValidator(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Insira seu nome de usuário';
-    }
-    return null;
-  }
-
-  String? _passwordValidator(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Insira sua senha';
-    }
-    return null;
-  }
-
-  void _login() {}
 }

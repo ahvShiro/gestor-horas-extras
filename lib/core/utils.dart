@@ -25,6 +25,21 @@ class Utils {
     return null;
   }
 
+  static String? validateEmail(String? email) {
+    if (email == null || email.trim().isEmpty) {
+      return 'Insira um email';
+    }
+
+    final emailRegex = RegExp(
+      r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+    );
+
+    if (!emailRegex.hasMatch(email.trim())) {
+      return 'Insira um email válido';
+    }
+    return null;
+  }
+
   static String formatDate(DateTime date) {
     final day = date.day.toString().padLeft(2, '0');
     final month = date.month.toString().padLeft(2, '0');
@@ -147,7 +162,9 @@ class _HourMinuteInputFormatter extends TextInputFormatter {
       return const TextEditingValue(text: '');
     }
 
-    final clipped = digitsOnly.length > 4 ? digitsOnly.substring(0, 4) : digitsOnly;
+    final clipped = digitsOnly.length > 4
+        ? digitsOnly.substring(0, 4)
+        : digitsOnly;
     final formattedText = clipped.length <= 2
         ? clipped
         : '${clipped.substring(0, clipped.length - 2)}:${clipped.substring(clipped.length - 2)}';
