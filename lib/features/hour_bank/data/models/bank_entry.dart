@@ -30,14 +30,16 @@ class BankEntry {
   });
 
   int get amountMinutes {
+    final amount = (workedMinutes * timeMultiplier).round();
+    return entryType == EntryType.timeOff ? -amount : amount;
+  }
+
+  int get workedMinutes {
     var worked = firstClockOut.difference(firstClockIn).inMinutes;
 
-    if (secondClockIn != null && secondClockOut != null) {
-      worked += secondClockOut!.difference(secondClockIn!).inMinutes;
-    }
+    if (secondClockIn == null || secondClockOut == null) return worked;
 
-    final amount = (worked * timeMultiplier).round();
-    return entryType == EntryType.timeOff ? -amount : amount;
+    return worked + secondClockOut!.difference(secondClockIn!).inMinutes;
   }
 
   Map<String, dynamic> toMap() {

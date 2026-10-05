@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../controllers/dashboard_controller.dart';
 import '../widgets/bank_entries_listing.dart';
@@ -60,6 +61,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 const SizedBox(height: 22),
                 BankEntriesListing(controller: _controller),
                 const SizedBox(height: 16),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () => context.push('/overtime'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green.shade700,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                    ),
+                    child: const Text('Cadastrar atividade'),
+                  ),
+                ),
               ],
             );
           },

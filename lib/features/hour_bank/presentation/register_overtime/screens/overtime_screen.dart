@@ -17,24 +17,10 @@ class _OvertimeScreenState extends State<OvertimeScreen> {
   final _controller = OvertimeController();
 
   final _formKey = GlobalKey<FormState>();
-  final _controllerDate = TextEditingController(
-    text: Utils.formatDate(DateTime.now()),
-  );
-  final _controllerDescription = TextEditingController();
-  final _controllerEntry = TextEditingController();
-  final _controllerExit = TextEditingController();
-  final _controllerEntry2 = TextEditingController();
-  final _controllerExit2 = TextEditingController();
 
   @override
   void dispose() {
     _controller.dispose();
-    _controllerDate.dispose();
-    _controllerDescription.dispose();
-    _controllerEntry.dispose();
-    _controllerExit.dispose();
-    _controllerEntry2.dispose();
-    _controllerExit2.dispose();
     super.dispose();
   }
 
@@ -43,15 +29,7 @@ class _OvertimeScreenState extends State<OvertimeScreen> {
       return;
     }
 
-    final isFullDay = _controller.isFullDay;
-    final saved = await _controller.saveOvertime(
-      date: _controllerDate.text,
-      description: _controllerDescription.text,
-      firstClockIn: _controllerEntry.text,
-      firstClockOut: _controllerExit.text,
-      secondClockIn: isFullDay ? _controllerEntry2.text : null,
-      secondClockOut: isFullDay ? _controllerExit2.text : null,
-    );
+    final saved = await _controller.saveOvertime();
 
     if (!mounted) return;
 
@@ -102,7 +80,8 @@ class _OvertimeScreenState extends State<OvertimeScreen> {
                       return Column(
                         children: [
                           TextFormField(
-                            controller: _controllerDate,
+                            initialValue: _controller.date,
+                            onChanged: _controller.setDate,
                             validator: (value) => Utils.validateDateBr(value),
                             decoration: const InputDecoration(
                               border: OutlineInputBorder(),
@@ -114,12 +93,13 @@ class _OvertimeScreenState extends State<OvertimeScreen> {
                           const SizedBox(height: 18),
 
                           TextFormField(
-                            controller: _controllerDescription,
-                            validator: _controller.validateDescription,
+                            initialValue: _controller.title,
+                            onChanged: (value) => _controller.title = value,
+                            validator: _controller.validateTitle,
                             decoration: const InputDecoration(
                               border: OutlineInputBorder(),
-                              labelText: 'Descrição da atividade',
-                              hintText: 'Ex.: Mutirão de vacinação',
+                              labelText: 'Título da atividade',
+                              hintText: 'Insira o título da atividade',
                             ),
                           ),
 
@@ -138,7 +118,8 @@ class _OvertimeScreenState extends State<OvertimeScreen> {
 
                           if (!_controller.isFullDay) ...[
                             TextFormField(
-                              controller: _controllerEntry,
+                              initialValue: _controller.firstClockIn,
+                              onChanged: _controller.setFirstClockIn,
                               validator: (value) {
                                 return Utils.validateHourMinute(
                                   value,
@@ -152,14 +133,15 @@ class _OvertimeScreenState extends State<OvertimeScreen> {
                               decoration: const InputDecoration(
                                 border: OutlineInputBorder(),
                                 labelText: 'Entrada',
-                                hintText: '08:00',
+                                hintText: 'Insira o horário de entrada',
                               ),
                             ),
 
                             const SizedBox(height: 18),
 
                             TextFormField(
-                              controller: _controllerExit,
+                              initialValue: _controller.firstClockOut,
+                              onChanged: _controller.setFirstClockOut,
                               validator: (value) {
                                 return Utils.validateHourMinute(
                                   value,
@@ -173,7 +155,7 @@ class _OvertimeScreenState extends State<OvertimeScreen> {
                               decoration: const InputDecoration(
                                 border: OutlineInputBorder(),
                                 labelText: 'Saída',
-                                hintText: 'Insira horário de saída',
+                                hintText: 'Insira o horário de saída',
                               ),
                             ),
                           ] else ...[
@@ -181,7 +163,8 @@ class _OvertimeScreenState extends State<OvertimeScreen> {
                               children: [
                                 Expanded(
                                   child: TextFormField(
-                                    controller: _controllerEntry,
+                                    initialValue: _controller.firstClockIn,
+                                    onChanged: _controller.setFirstClockIn,
                                     validator: (value) {
                                       return Utils.validateHourMinute(
                                         value,
@@ -194,8 +177,8 @@ class _OvertimeScreenState extends State<OvertimeScreen> {
                                     ],
                                     decoration: const InputDecoration(
                                       border: OutlineInputBorder(),
-                                      labelText: 'Primaira entrada',
-                                      hintText: 'Insira horário de entrada',
+                                      labelText: 'Primeira entrada',
+                                      hintText: 'Insira o horário',
                                     ),
                                   ),
                                 ),
@@ -204,7 +187,8 @@ class _OvertimeScreenState extends State<OvertimeScreen> {
 
                                 Expanded(
                                   child: TextFormField(
-                                    controller: _controllerEntry2,
+                                    initialValue: _controller.secondClockIn,
+                                    onChanged: _controller.setSecondClockIn,
                                     validator: (value) {
                                       return Utils.validateHourMinute(
                                         value,
@@ -218,7 +202,7 @@ class _OvertimeScreenState extends State<OvertimeScreen> {
                                     decoration: const InputDecoration(
                                       border: OutlineInputBorder(),
                                       labelText: 'Segunda entrada',
-                                      hintText: 'Insira horário de entrada',
+                                      hintText: 'Insira o horário',
                                     ),
                                   ),
                                 ),
@@ -231,7 +215,8 @@ class _OvertimeScreenState extends State<OvertimeScreen> {
                               children: [
                                 Expanded(
                                   child: TextFormField(
-                                    controller: _controllerExit,
+                                    initialValue: _controller.firstClockOut,
+                                    onChanged: _controller.setFirstClockOut,
                                     validator: (value) {
                                       return Utils.validateHourMinute(
                                         value,
@@ -245,7 +230,7 @@ class _OvertimeScreenState extends State<OvertimeScreen> {
                                     decoration: const InputDecoration(
                                       border: OutlineInputBorder(),
                                       labelText: 'Primeira saída',
-                                      hintText: 'Insira horário de saída',
+                                      hintText: 'Insira o horário',
                                     ),
                                   ),
                                 ),
@@ -254,7 +239,8 @@ class _OvertimeScreenState extends State<OvertimeScreen> {
 
                                 Expanded(
                                   child: TextFormField(
-                                    controller: _controllerExit2,
+                                    initialValue: _controller.secondClockOut,
+                                    onChanged: _controller.setSecondClockOut,
                                     validator: (value) {
                                       return Utils.validateHourMinute(
                                         value,
@@ -268,7 +254,7 @@ class _OvertimeScreenState extends State<OvertimeScreen> {
                                     decoration: const InputDecoration(
                                       border: OutlineInputBorder(),
                                       labelText: 'Segunda saída',
-                                      hintText: 'Insira horário de saída',
+                                      hintText: 'Insira o horário',
                                     ),
                                   ),
                                 ),
@@ -299,13 +285,7 @@ class _OvertimeScreenState extends State<OvertimeScreen> {
 
                           const SizedBox(height: 20),
 
-                          HoursSummary(
-                            controller: _controller,
-                            firstClockIn: _controllerEntry,
-                            firstClockOut: _controllerExit,
-                            secondClockIn: _controllerEntry2,
-                            secondClockOut: _controllerExit2,
-                          ),
+                          HoursSummary(draft: _controller.draft),
 
                           const SizedBox(height: 20),
 
