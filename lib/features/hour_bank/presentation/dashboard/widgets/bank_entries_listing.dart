@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:gestor_horas_extras/features/hour_bank/data/models/bank_entry.dart';
-import 'package:gestor_horas_extras/features/hour_bank/presentation/controllers/bank_hours_home_controller.dart';
 
+import '../../../data/models/bank_entry.dart';
+import '../controllers/dashboard_controller.dart';
 import 'entry_tiles.dart';
 
 class BankEntriesListing extends StatelessWidget {

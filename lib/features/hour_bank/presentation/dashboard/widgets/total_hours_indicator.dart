@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gestor_horas_extras/core/utils.dart';
-import 'package:gestor_horas_extras/features/hour_bank/presentation/controllers/bank_hours_home_controller.dart';
+
+import '../controllers/dashboard_controller.dart';
 
 class TotalHoursIndicator extends StatelessWidget {
   const TotalHoursIndicator({super.key, required this.controller});

@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:gestor_horas_extras/features/hour_bank/data/models/bank_entry.dart';
-import 'package:gestor_horas_extras/features/hour_bank/domain/repositories/bank_entry_repository.dart';
+import '../../domain/repositories/bank_entry_repository.dart';
+import '../models/bank_entry.dart';
 
 class FirestoreBankEntryRepository implements BankEntryRepository {
   final _db = FirebaseFirestore.instance

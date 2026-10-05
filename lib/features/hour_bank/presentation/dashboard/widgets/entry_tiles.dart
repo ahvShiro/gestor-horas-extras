@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:gestor_horas_extras/core/utils.dart';
 
-import '../../data/models/bank_entry.dart';
+import '../../../data/models/bank_entry.dart';
 
 class EntryTiles extends StatelessWidget {
   const EntryTiles({

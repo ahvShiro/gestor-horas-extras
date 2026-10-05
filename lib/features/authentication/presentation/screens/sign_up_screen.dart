@@ -123,7 +123,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   void _redirect() {
-    context.go("/test");
+    context.go('/dashboard');
   }
 
   Widget _buildInfoStep() {

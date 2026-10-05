@@ -51,7 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _redirect() {
-    context.go('/test');
+    context.go('/dashboard');
   }
 
   @override

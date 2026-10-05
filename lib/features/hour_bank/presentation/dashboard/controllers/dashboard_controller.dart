@@ -2,9 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:gestor_horas_extras/features/authentication/data/services/auth_service.dart';
-import 'package:gestor_horas_extras/features/hour_bank/data/models/bank_entry.dart';
-import 'package:gestor_horas_extras/features/hour_bank/data/repositories/firestore_bank_entry_repository.dart';
-import 'package:gestor_horas_extras/features/hour_bank/domain/repositories/bank_entry_repository.dart';
+
+import '../../../data/models/bank_entry.dart';
+import '../../../data/repositories/firestore_bank_entry_repository.dart';
+import '../../../domain/repositories/bank_entry_repository.dart';
 
 class BankHoursHomeController extends ChangeNotifier {
   BankHoursHomeController({
@@ -42,7 +43,8 @@ class BankHoursHomeController extends ChangeNotifier {
             errorMessage = null;
             notifyListeners();
           },
-          onError: (_) {
+          onError: (Object error) {
+            debugPrint('watchAllFromUser error: $error');
             loading = false;
             errorMessage = 'Não foi possível carregar o banco de horas';
             notifyListeners();
