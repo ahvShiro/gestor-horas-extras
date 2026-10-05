@@ -6,7 +6,7 @@ class BankEntry {
   final String uid;
   final String userId;
   final String title;
-  final String? description;
+  final String? observation;
   final EntryType entryType;
   final double timeMultiplier;
   final DateTime firstClockIn;
@@ -19,7 +19,7 @@ class BankEntry {
     required this.uid,
     required this.userId,
     required this.title,
-    this.description,
+    this.observation,
     required this.entryType,
     required this.timeMultiplier,
     required this.firstClockIn,
@@ -30,11 +30,11 @@ class BankEntry {
   });
 
   int get amountMinutes {
-    final amount = (workedMinutes * timeMultiplier).round();
+    final amount = (durationMinutes * timeMultiplier).round();
     return entryType == EntryType.timeOff ? -amount : amount;
   }
 
-  int get workedMinutes {
+  int get durationMinutes {
     var worked = firstClockOut.difference(firstClockIn).inMinutes;
 
     if (secondClockIn == null || secondClockOut == null) return worked;
@@ -45,7 +45,7 @@ class BankEntry {
   Map<String, dynamic> toMap() {
     return {
       'title': title,
-      'description': description,
+      'description': observation,
       'entryType': entryType.name,
       'timeMultiplier': timeMultiplier,
       'firstClockIn': firstClockIn,
@@ -61,7 +61,7 @@ class BankEntry {
     return BankEntry(
       uid: id,
       title: map['title'] as String,
-      description: map['description'] as String?,
+      observation: map['description'] as String?,
       entryType: EntryType.values.byName(map['entryType'] as String),
       timeMultiplier: (map['timeMultiplier'] as num).toDouble(),
       firstClockIn: (map['firstClockIn'] as Timestamp).toDate(),

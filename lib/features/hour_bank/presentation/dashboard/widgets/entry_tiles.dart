@@ -59,9 +59,9 @@ class EntryTiles extends StatelessWidget {
             fontWeight: FontWeight.w600,
           ),
         ),
-        subtitle: entry.description != null
+        subtitle: entry.observation != null
             ? Text(
-                entry.description!,
+                entry.observation!,
                 style: TextStyle(color: entryColor.withValues(alpha: 0.8)),
               )
             : Text(''),

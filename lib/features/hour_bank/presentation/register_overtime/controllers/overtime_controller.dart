@@ -91,7 +91,7 @@ class OvertimeController extends ChangeNotifier {
       uid: '',
       userId: _authService.currentUserId ?? '',
       title: title.trim(),
-      description: isFullDay ? 'Atividade em dia inteiro' : 'Atividade',
+      observation: isFullDay ? 'Atividade em dia inteiro' : 'Atividade',
       entryType: EntryType.overtime,
       timeMultiplier: timeMultiplier,
       firstClockIn: firstIn,

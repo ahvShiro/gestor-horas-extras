@@ -58,21 +58,43 @@ class _DashboardScreenState extends State<DashboardScreen> {
             return Column(
               children: [
                 TotalHoursIndicator(controller: _controller),
+
                 const SizedBox(height: 22),
+
                 BankEntriesListing(controller: _controller),
+
                 const SizedBox(height: 16),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () => context.push('/overtime'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green.shade700,
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 16),
+
+                Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () => context.push('/time_off'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.red.shade700,
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                        ),
+                        child: const Text('Registrar folga'),
+                      ),
                     ),
-                    child: const Text('Cadastrar atividade'),
-                  ),
+
+                    const SizedBox(width: 10),
+
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () => context.push('/overtime'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.green.shade700,
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                        ),
+                        child: const Text('Cadastrar atividade'),
+                      ),
+                    ),
+                  ],
                 ),
+                const SizedBox(height: 10),
               ],
             );
           },

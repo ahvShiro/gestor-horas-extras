@@ -17,10 +17,10 @@ class TotalHoursIndicator extends StatelessWidget {
           textAlign: TextAlign.center,
         ),
 
-        const SizedBox(height: 6),
+        const SizedBox(height: 4),
         const Text(
           'no banco de horas',
-          style: TextStyle(fontSize: 16, color: Colors.black54),
+          style: TextStyle(fontSize: 20, color: Colors.black54),
         ),
       ],
     );
