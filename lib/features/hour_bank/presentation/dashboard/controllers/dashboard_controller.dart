@@ -55,7 +55,7 @@ class BankHoursHomeController extends ChangeNotifier {
 
   Future<void> deleteEntry(BankEntry entry) async {
     if (entry.entryType == EntryType.overtime &&
-        balanceMinutes <= entry.amountMinutes) {
+        balanceMinutes < entry.amountMinutes) {
       throw BusinessException(
         'O banco de horas ficaria no vermelho caso esse registro fosse deletado!',
       );
