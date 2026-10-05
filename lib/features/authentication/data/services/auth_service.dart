@@ -13,6 +13,8 @@ class AuthService {
   final _auth = FirebaseAuth.instance;
   final AppUserRepository _userRepository;
 
+  String? get currentUserId => _auth.currentUser?.uid;
+
   Future<void> signUp({
     required String email,
     required String password,
