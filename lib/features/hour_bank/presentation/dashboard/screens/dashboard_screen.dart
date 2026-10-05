@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gestor_horas_extras/common_widgets/app_snack_bar.dart';
 import 'package:go_router/go_router.dart';
 
 import '../controllers/dashboard_controller.dart';
@@ -69,7 +70,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   children: [
                     Expanded(
                       child: ElevatedButton(
-                        onPressed: () => context.push('/time_off'),
+                        onPressed: () {
+                          if (_controller.balanceMinutes <= 0) {
+                            AppSnackBar.showError(
+                              context,
+                              'Não é possível adicionar folgas com um banco vazio',
+                            );
+                            return;
+                          }
+
+                          context.push('/time_off');
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.red.shade700,
                           foregroundColor: Colors.white,
