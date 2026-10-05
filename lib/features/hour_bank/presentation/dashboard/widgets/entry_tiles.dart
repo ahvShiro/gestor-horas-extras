@@ -30,14 +30,14 @@ class EntryTiles extends StatelessWidget {
         motion: const DrawerMotion(),
         extentRatio: 0.45,
         children: [
-          SlidableAction(
-            onPressed: (_) => onEdit(),
-            backgroundColor: Colors.blue.shade700,
-            foregroundColor: Colors.white,
-            icon: Icons.edit,
-            label: 'Editar',
-            borderRadius: BorderRadius.circular(10),
-          ),
+          // SlidableAction(
+          //   onPressed: (_) => onEdit(),
+          //   backgroundColor: Colors.blue.shade700,
+          //   foregroundColor: Colors.white,
+          //   icon: Icons.edit,
+          //   label: 'Editar',
+          //   borderRadius: BorderRadius.circular(10),
+          // ),
           SlidableAction(
             onPressed: (_) => onDelete(),
             backgroundColor: Colors.red.shade700,

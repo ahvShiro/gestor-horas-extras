@@ -40,11 +40,14 @@ class _OvertimeScreenState extends State<OvertimeScreen> {
 
     if (!mounted || !updated) return;
 
-    final message = _controller.timeMultiplier == 2.0
-        ? 'Atividade em final de semana/feriado (x2)'
-        : 'Atividade em dia de semana (x1,5)';
-
-    AppSnackBar.showSuccess(context, message);
+    if (_controller.timeMultiplier == 2.0) {
+      AppSnackBar.showSuccess(
+        context,
+        'Atividade em final de semana/feriado (x2)',
+      );
+    } else {
+      AppSnackBar.showMessage(context, 'Atividade em dia de semana (x1,5)');
+    }
   }
 
   Future<void> _saveOvertime() async {

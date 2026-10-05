@@ -72,19 +72,18 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
 
-              const SizedBox(height: 4),
-
-              Align(
-                alignment: Alignment.centerLeft,
-                child: GestureDetector(
-                  onTap: () => context.go("/sign_up"),
-                  child: const Text(
-                    'Não tem uma conta? Cadastre-se aqui',
-                    style: TextStyle(fontSize: 16, color: Colors.blue),
-                  ),
-                ),
-              ),
-
+              // const SizedBox(height: 4),
+              //
+              // Align(
+              //   alignment: Alignment.centerLeft,
+              //   child: GestureDetector(
+              //     onTap: () => context.go("/sign_up"),
+              //     child: const Text(
+              //       'Não tem uma conta? Cadastre-se aqui',
+              //       style: TextStyle(fontSize: 16, color: Colors.blue),
+              //     ),
+              //   ),
+              // ),
               const SizedBox(height: 16),
 
               Form(
