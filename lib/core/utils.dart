@@ -149,6 +149,11 @@ class Utils {
     final minutes = safeMinutes % 60;
     return '${hours}h${minutes.toString().padLeft(2, '0')}min';
   }
+
+  static String formatSignedMinutes(int minutes) {
+    final sign = minutes >= 0 ? '' : '-';
+    return '$sign${formatMinutes(minutes.abs())}';
+  }
 }
 
 class _HourMinuteInputFormatter extends TextInputFormatter {
