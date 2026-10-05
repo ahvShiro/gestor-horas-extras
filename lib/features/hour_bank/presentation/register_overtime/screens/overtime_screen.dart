@@ -24,6 +24,29 @@ class _OvertimeScreenState extends State<OvertimeScreen> {
     super.dispose();
   }
 
+  @override
+  void initState() {
+    super.initState();
+    _updateMultiplier();
+  }
+
+  void _onDateChanged(String value) {
+    _controller.setDate(value);
+    _updateMultiplier();
+  }
+
+  Future<void> _updateMultiplier() async {
+    final updated = await _controller.updateMarkiplier();
+
+    if (!mounted || !updated) return;
+
+    final message = _controller.timeMultiplier == 2.0
+        ? 'Atividade em final de semana/feriado (x2)'
+        : 'Atividade em dia de semana (x1,5)';
+
+    AppSnackBar.showSuccess(context, message);
+  }
+
   Future<void> _saveOvertime() async {
     if (!_formKey.currentState!.validate()) {
       return;
@@ -81,7 +104,7 @@ class _OvertimeScreenState extends State<OvertimeScreen> {
                         children: [
                           TextFormField(
                             initialValue: _controller.date,
-                            onChanged: _controller.setDate,
+                            onChanged: _onDateChanged,
                             validator: (value) => Utils.validateDateBr(value),
                             decoration: const InputDecoration(
                               border: OutlineInputBorder(),
@@ -261,26 +284,36 @@ class _OvertimeScreenState extends State<OvertimeScreen> {
                               ],
                             ),
                           ],
-                          const SizedBox(height: 18),
+                          // Seletor oculto: o cliente atual não escolhe o
+                          // multiplicador, ele vem da data
+                          Visibility(
+                            visible: false,
+                            child: Column(
+                              children: [
+                                const SizedBox(height: 18),
 
-                          DropdownButtonFormField<double>(
-                            initialValue: _controller.timeMultiplier,
-                            decoration: const InputDecoration(
-                              border: OutlineInputBorder(),
-                              labelText: 'Tipo de atividade',
+                                DropdownButtonFormField<double>(
+                                  initialValue: _controller.timeMultiplier,
+                                  decoration: const InputDecoration(
+                                    border: OutlineInputBorder(),
+                                    labelText: 'Tipo de atividade',
+                                  ),
+                                  key: ValueKey(_controller.timeMultiplier),
+                                  items: const [
+                                    DropdownMenuItem(
+                                      value: 2,
+                                      child: Text('Final de semana (x2)'),
+                                    ),
+                                    DropdownMenuItem(
+                                      value: 1.5,
+                                      child: Text('Dia de semana (x1,5)'),
+                                    ),
+                                  ],
+                                  onChanged: (value) => _controller
+                                      .setTimeMultiplier(value ?? 1.5),
+                                ),
+                              ],
                             ),
-                            items: const [
-                              DropdownMenuItem(
-                                value: 2,
-                                child: Text('Final de semana (x2)'),
-                              ),
-                              DropdownMenuItem(
-                                value: 1.5,
-                                child: Text('Dia de semana (x1,5)'),
-                              ),
-                            ],
-                            onChanged: (value) =>
-                                _controller.setTimeMultiplier(value ?? 1.5),
                           ),
 
                           const SizedBox(height: 20),

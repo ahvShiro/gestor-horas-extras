@@ -3,17 +3,23 @@ import 'package:gestor_horas_extras/core/utils.dart';
 import 'package:gestor_horas_extras/features/authentication/data/services/auth_service.dart';
 import 'package:gestor_horas_extras/features/hour_bank/data/models/bank_entry.dart';
 import 'package:gestor_horas_extras/features/hour_bank/data/repositories/firestore_bank_entry_repository.dart';
+import 'package:gestor_horas_extras/features/hour_bank/data/service/holiday_service.dart';
 import 'package:gestor_horas_extras/features/hour_bank/domain/repositories/bank_entry_repository.dart';
+
+import '../../../../../core/exceptions/api_exception.dart';
 
 class OvertimeController extends ChangeNotifier {
   OvertimeController({
     BankEntryRepository? repository,
     AuthService? authService,
+    HolidayService? holidayService,
   }) : _repository = repository ?? FirestoreBankEntryRepository(),
-       _authService = authService ?? AuthService();
+       _authService = authService ?? AuthService(),
+       _holidayService = holidayService ?? HolidayService();
 
   final BankEntryRepository _repository;
   final AuthService _authService;
+  final HolidayService _holidayService;
 
   String date = Utils.formatDate(DateTime.now());
   String title = '';
@@ -29,6 +35,25 @@ class OvertimeController extends ChangeNotifier {
   void setDate(String value) {
     date = value;
     notifyListeners();
+  }
+
+  Future<bool> updateMarkiplier() async {
+    final day = Utils.parseDateBr(date);
+
+    if (day == null) return false;
+
+    bool valueDoubleCondition = _holidayService.isWeekend(day);
+    if (!valueDoubleCondition) {
+      try {
+        valueDoubleCondition = await _holidayService.isHoliday(day);
+      } on ApiException {
+        print('API could not retrieve holiday data');
+      }
+    }
+
+    timeMultiplier = valueDoubleCondition ? 2.0 : 1.5;
+    notifyListeners();
+    return true;
   }
 
   void setFirstClockIn(String value) {
