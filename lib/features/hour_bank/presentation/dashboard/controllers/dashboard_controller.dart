@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:gestor_horas_extras/features/authentication/data/services/auth_service.dart';
 
+import '../../../../../core/exceptions/business_exception.dart';
 import '../../../data/models/bank_entry.dart';
 import '../../../data/repositories/firestore_bank_entry_repository.dart';
 import '../../../domain/repositories/bank_entry_repository.dart';
@@ -53,6 +54,13 @@ class BankHoursHomeController extends ChangeNotifier {
   }
 
   Future<void> deleteEntry(BankEntry entry) async {
+    if (entry.entryType == EntryType.overtime &&
+        balanceMinutes <= entry.amountMinutes) {
+      throw BusinessException(
+        'O banco de horas ficaria no vermelho caso esse registro fosse deletado!',
+      );
+    }
+
     try {
       await _repository.delete(entry.uid);
     } catch (_) {

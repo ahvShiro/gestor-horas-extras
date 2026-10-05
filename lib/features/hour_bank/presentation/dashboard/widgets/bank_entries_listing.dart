@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:gestor_horas_extras/common_widgets/app_snack_bar.dart';
+import 'package:gestor_horas_extras/core/exceptions/business_exception.dart';
 
 import '../../../data/models/bank_entry.dart';
 import '../controllers/dashboard_controller.dart';
@@ -37,7 +39,13 @@ class BankEntriesListing extends StatelessWidget {
     );
 
     if (shouldDelete == true) {
-      await controller.deleteEntry(entry);
+      try {
+        await controller.deleteEntry(entry);
+      } on BusinessException catch (e) {
+        if (context.mounted) {
+          AppSnackBar.showError(context, e.message);
+        }
+      }
     }
   }
 
